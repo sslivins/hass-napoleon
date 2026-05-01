@@ -1,0 +1,13 @@
+{
+  "domain": "napoleon",
+  "name": "Napoleon Fireplace",
+  "version": "0.0.1",
+  "config_flow": true,
+  "iot_class": "cloud_polling",
+  "integration_type": "device",
+  "documentation": "https://github.com/sslivins/hass-napoleon",
+  "issue_tracker": "https://github.com/sslivins/hass-napoleon/issues",
+  "codeowners": ["@sslivins"],
+  "requirements": ["pynapoleon==0.0.1"],
+  "dependencies": []
+}
