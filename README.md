@@ -5,11 +5,11 @@ Home Assistant custom integration for **Napoleon Astound**-series fireplaces.
 This integration is a thin wrapper around [`pynapoleon`](https://github.com/sslivins/pynapoleon),
 which talks to Napoleon's cloud (an Ayla Networks IoT tenant) on your behalf.
 
-> **Status: alpha.** All planned platforms for this fireplace model are
+> **Status: beta.** All planned platforms for this fireplace model are
 > implemented: power, accent lights, flame intensity, favourite scene,
 > heater + setpoint, and extra toggles (eco / boost / ember-bed cycling /
-> top-light cycling). Awaiting `pynapoleon` PyPI publish + HACS submission
-> before stable release.
+> top-light cycling). [`pynapoleon`](https://pypi.org/project/pynapoleon/)
+> is published; HACS default-repo submission is pending.
 
 ## Requirements
 
