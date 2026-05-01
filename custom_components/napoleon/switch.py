@@ -72,7 +72,6 @@ class NapoleonPowerSwitch(NapoleonEntity, SwitchEntity):
     """Main on/off switch for the fireplace."""
 
     _attr_translation_key = "fireplace_power"
-    _attr_name = None  # use device name only (has_entity_name=True)
 
     def __init__(self, coordinator: NapoleonCoordinator) -> None:
         super().__init__(coordinator, "power")
