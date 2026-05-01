@@ -45,6 +45,10 @@
       "boost_mode": { "name": "Boost mode" },
       "ember_bed_cycling": { "name": "Ember bed cycling" },
       "top_light_cycling": { "name": "Top light cycling" }
+    },
+    "light": {
+      "ember_bed": { "name": "Ember bed" },
+      "top_light": { "name": "Top light" }
     }
   }
 }
