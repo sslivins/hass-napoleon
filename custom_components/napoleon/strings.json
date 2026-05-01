@@ -26,5 +26,12 @@
       "already_configured": "This account is already configured.",
       "reauth_successful": "Re-authentication was successful."
     }
+  },
+  "entity": {
+    "number": {
+      "flame_speed": { "name": "Flame speed" },
+      "orange_flame": { "name": "Orange flame" },
+      "yellow_flame": { "name": "Yellow flame" }
+    }
   }
 }
