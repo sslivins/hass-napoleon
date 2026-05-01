@@ -7,7 +7,7 @@ from datetime import timedelta
 DOMAIN = "napoleon"
 MANUFACTURER = "Napoleon"
 
-PLATFORMS: list[str] = ["switch"]
+PLATFORMS: list[str] = ["light", "switch"]
 
 CONF_EMAIL = "email"
 CONF_PASSWORD = "password"  # noqa: S105 - field name, not a value
