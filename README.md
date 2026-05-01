@@ -5,9 +5,11 @@ Home Assistant custom integration for **Napoleon Astound**-series fireplaces.
 This integration is a thin wrapper around [`pynapoleon`](https://github.com/sslivins/pynapoleon),
 which talks to Napoleon's cloud (an Ayla Networks IoT tenant) on your behalf.
 
-> **Status: alpha.** Bootstrap release exposes the main fireplace power switch
-> only. Light, fan, flame intensity, setpoint, current temperature, and
-> favourite-scene entities will land in subsequent PRs.
+> **Status: alpha.** All planned platforms for this fireplace model are
+> implemented: power, accent lights, flame intensity, favourite scene,
+> heater + setpoint, and extra toggles (eco / boost / ember-bed cycling /
+> top-light cycling). Awaiting `pynapoleon` PyPI publish + HACS submission
+> before stable release.
 
 ## Requirements
 
@@ -28,17 +30,30 @@ This integration is not yet in the default HACS list. To install it now:
 
 ## What it does
 
-- Polls each fireplace on your Napoleon account once per minute.
-- Provides one `switch.<fireplace_name>` per fireplace (main power).
+Polls each fireplace on your Napoleon account once per minute and exposes:
 
-## What it does *not* do (yet)
+- **`switch.<name>`** — main fireplace power
+- **`switch.<name>_eco_mode`**, **`_boost_mode`**, **`_ember_bed_cycling`**,
+  **`_top_light_cycling`** — auxiliary toggles
+- **`light.<name>_ember_bed`**, **`<name>_top_light`** — accent lights with
+  brightness 0–255 (mapped to the device's 0–5 scale)
+- **`number.<name>_flame_intensity`** — flame height 0–5
+- **`select.<name>_favourite`** — preset scene
+  (`partytime` / `campfirewarmth` / `summerday` / `glowingsunset`)
+- **`climate.<name>`** — heater stage (off / low / high) + setpoint
+  18–23 °C
 
-- Light / RGB control (planned)
-- Fan / blower control (planned)
-- Flame intensity number entities (planned)
-- Setpoint / current temperature (planned)
-- Heater / climate control (planned, requires more verification)
-- Favourite scenes (planned)
+After every command the integration immediately re-polls the device, so the
+UI reflects the new state within a second or two.
+
+## What it does *not* do
+
+- **Fan / blower control.** This fireplace model has no blower datapoint;
+  there is nothing to expose.
+- **Ambient temperature sensor.** This model does not report a room
+  temperature, so the climate entity is setpoint-only.
+- **Push updates.** Napoleon's push channel is broken on this tenant
+  (`subscriptions.json` returns 403), so the integration polls instead.
 
 ## Credentials
 
