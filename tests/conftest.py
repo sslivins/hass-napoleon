@@ -68,6 +68,7 @@ def mock_fireplace(fireplace_state: FireplaceState, fireplace_info: FireplaceInf
     fp.set_ember_bed_rgb = AsyncMock(return_value=None)
     fp.set_ember_bed_brightness = AsyncMock(return_value=None)
     fp.set_top_light_rgb = AsyncMock(return_value=None)
+    fp.apply_favourite = AsyncMock(return_value=None)
     return fp
 
 

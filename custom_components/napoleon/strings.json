@@ -32,6 +32,9 @@
       "flame_speed": { "name": "Flame speed" },
       "orange_flame": { "name": "Orange flame" },
       "yellow_flame": { "name": "Yellow flame" }
+    },
+    "select": {
+      "favourite": { "name": "Favourite" }
     }
   }
 }
