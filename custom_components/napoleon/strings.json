@@ -35,6 +35,9 @@
     },
     "select": {
       "favourite": { "name": "Favourite" }
+    },
+    "climate": {
+      "fireplace": { "name": "Fireplace" }
     }
   }
 }
