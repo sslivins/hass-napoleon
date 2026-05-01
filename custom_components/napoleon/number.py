@@ -29,7 +29,6 @@ class _NapoleonNumberBase(NapoleonEntity, NumberEntity):
 
     _attr_mode = NumberMode.SLIDER
     _attr_native_step = 1
-    _attr_name = None
 
 
 class NapoleonFlameSpeedNumber(_NapoleonNumberBase):
