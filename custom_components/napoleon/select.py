@@ -27,7 +27,6 @@ class NapoleonFavouriteSelect(NapoleonEntity, SelectEntity):
     """Pick the active Napoleon favourite scene."""
 
     _attr_translation_key = "favourite"
-    _attr_name = None
     _attr_icon = "mdi:palette"
     _attr_options = list(FAVOURITES)
 
