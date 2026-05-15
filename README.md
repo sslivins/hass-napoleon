@@ -13,7 +13,7 @@ which talks to Napoleon's cloud (an Ayla Networks IoT tenant) on your behalf.
 
 ## Requirements
 
-- Home Assistant 2024.11 or newer
+- Home Assistant 2026.5 or newer
 - A working Napoleon mobile-app account (email + password)
 - A Napoleon Astound-series fireplace already paired with the app
 
