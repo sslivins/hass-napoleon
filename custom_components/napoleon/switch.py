@@ -72,6 +72,7 @@ class NapoleonPowerSwitch(NapoleonEntity, SwitchEntity):
     """Main on/off switch for the fireplace."""
 
     _attr_translation_key = "fireplace_power"
+    _requires_power = False  # always available so the user can turn power back on
 
     def __init__(self, coordinator: NapoleonCoordinator) -> None:
         super().__init__(coordinator, "power")

@@ -67,7 +67,7 @@ async def test_current_option_when_unset(hass: HomeAssistant, mock_client: Magic
 async def test_current_option_reflects_state(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
-    mock_fireplace.state = FireplaceState(current_favourite="partytime")
+    mock_fireplace.state = FireplaceState(power=True, current_favourite="partytime")
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     state = hass.states.get(_ent_id(hass))
@@ -79,7 +79,7 @@ async def test_current_option_unknown_value_is_none(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
     """A value not in FAVOURITES surfaces as unknown rather than crashing."""
-    mock_fireplace.state = FireplaceState(current_favourite="bogus")
+    mock_fireplace.state = FireplaceState(power=True, current_favourite="bogus")
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     state = hass.states.get(_ent_id(hass))

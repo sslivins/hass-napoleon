@@ -62,7 +62,7 @@ async def test_state_off_when_heater_zero(hass: HomeAssistant, mock_client: Magi
 async def test_state_heat_low(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
-    mock_fireplace.state = FireplaceState(heater=1, setpoint_c=21)
+    mock_fireplace.state = FireplaceState(power=True, heater=1, setpoint_c=21)
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     state = hass.states.get(_ent_id(hass))
@@ -74,7 +74,7 @@ async def test_state_heat_low(
 async def test_state_heat_high(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
-    mock_fireplace.state = FireplaceState(heater=2, setpoint_c=22)
+    mock_fireplace.state = FireplaceState(power=True, heater=2, setpoint_c=22)
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     state = hass.states.get(_ent_id(hass))
@@ -99,7 +99,7 @@ async def test_set_hvac_mode_heat_calls_set_heater_low(
 async def test_set_hvac_mode_off_calls_set_heater_zero(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
-    mock_fireplace.state = FireplaceState(heater=2, setpoint_c=20)
+    mock_fireplace.state = FireplaceState(power=True, heater=2, setpoint_c=20)
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     await hass.services.async_call(
@@ -114,7 +114,7 @@ async def test_set_hvac_mode_off_calls_set_heater_zero(
 async def test_set_hvac_mode_heat_noop_when_already_on(
     hass: HomeAssistant, mock_client: MagicMock, mock_fireplace: MagicMock
 ) -> None:
-    mock_fireplace.state = FireplaceState(heater=2, setpoint_c=20)
+    mock_fireplace.state = FireplaceState(power=True, heater=2, setpoint_c=20)
     mock_fireplace.refresh.return_value = mock_fireplace.state
     await _setup(hass)
     await hass.services.async_call(

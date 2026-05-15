@@ -14,6 +14,11 @@ class NapoleonEntity(CoordinatorEntity[NapoleonCoordinator]):
 
     _attr_has_entity_name = True
 
+    # When True (the default), the entity is marked unavailable while the
+    # fireplace is powered off. The main power switch overrides this to False
+    # so the user can still turn the fireplace back on.
+    _requires_power: bool = True
+
     def __init__(
         self,
         coordinator: NapoleonCoordinator,
@@ -30,3 +35,15 @@ class NapoleonEntity(CoordinatorEntity[NapoleonCoordinator]):
             sw_version=info.sw_version,
             serial_number=info.dsn,
         )
+
+    @property
+    def available(self) -> bool:
+        if not super().available:
+            return False
+        if not self._requires_power:
+            return True
+        data = self.coordinator.data
+        if data is None:
+            return False
+        return data.power is True
+
