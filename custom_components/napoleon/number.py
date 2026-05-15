@@ -59,11 +59,11 @@ class NapoleonFlameSpeedNumber(_NapoleonNumberBase):
 
 
 class NapoleonOrangeFlameNumber(_NapoleonNumberBase):
-    """Orange flame intensity (0..5)."""
+    """Orange flame intensity (0..4)."""
 
     _attr_translation_key = "orange_flame"
     _attr_native_min_value = 0
-    _attr_native_max_value = 5
+    _attr_native_max_value = 4
     _attr_icon = "mdi:fire"
 
     def __init__(self, coordinator: NapoleonCoordinator) -> None:
@@ -86,11 +86,11 @@ class NapoleonOrangeFlameNumber(_NapoleonNumberBase):
 
 
 class NapoleonYellowFlameNumber(_NapoleonNumberBase):
-    """Yellow flame intensity (0..5)."""
+    """Yellow flame intensity (0..4)."""
 
     _attr_translation_key = "yellow_flame"
     _attr_native_min_value = 0
-    _attr_native_max_value = 5
+    _attr_native_max_value = 4
     _attr_icon = "mdi:fire"
 
     def __init__(self, coordinator: NapoleonCoordinator) -> None:
