@@ -126,4 +126,4 @@ async def test_bounds(hass: HomeAssistant, mock_client: MagicMock) -> None:
     assert flame.attributes["step"] == 1
     assert orange is not None
     assert orange.attributes["min"] == 0
-    assert orange.attributes["max"] == 5
+    assert orange.attributes["max"] == 4
