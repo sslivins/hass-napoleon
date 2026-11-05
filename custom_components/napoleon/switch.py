@@ -72,7 +72,6 @@ class NapoleonPowerSwitch(NapoleonEntity, SwitchEntity):
     """Main on/off switch for the fireplace."""
 
     _attr_translation_key = "fireplace_power"
-    _requires_power = False  # always available so the user can turn power back on
 
     def __init__(self, coordinator: NapoleonCoordinator) -> None:
         super().__init__(coordinator, "power")
@@ -84,13 +83,13 @@ class NapoleonPowerSwitch(NapoleonEntity, SwitchEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         if self.is_on:
             return
-        await self.coordinator.fireplace.set_power(True)
+        await self.coordinator.async_set_power(True)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         if self.is_on is False:
             return
-        await self.coordinator.fireplace.set_power(False)
+        await self.coordinator.async_set_power(False)
         await self.coordinator.async_request_refresh()
 
 
@@ -117,6 +116,7 @@ class NapoleonToggleSwitch(NapoleonEntity, SwitchEntity):
         setter: Callable[[bool], Awaitable[None]] = getattr(
             self.coordinator.fireplace, self.entity_description.setter_name
         )
+        self._raise_if_power_off()
         await setter(value)
         await self.coordinator.async_request_refresh()
 

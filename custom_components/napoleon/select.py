@@ -42,5 +42,6 @@ class NapoleonFavouriteSelect(NapoleonEntity, SelectEntity):
         return value if value in FAVOURITES else None
 
     async def async_select_option(self, option: str) -> None:
+        await self._async_ensure_power_on()
         await self.coordinator.fireplace.apply_favourite(option)
         await self.coordinator.async_request_refresh()

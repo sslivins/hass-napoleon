@@ -32,6 +32,12 @@
   18–23 °C.
 - 🪛 **`switch.<name>_eco_mode`** / **`_boost_mode`** /
   **`_ember_bed_cycling`** / **`_top_light_cycling`** — auxiliary toggles.
+- 🔋 **Power-aware** — power is the master switch. While it is off the
+  heater and lights report `off`, settings keep their stored values,
+  turning the heater, a light or a favourite on powers the fireplace up
+  first, and settings changes (flames, eco/boost, cycling, setpoint) are
+  rejected with an error because the device would silently ignore them.
+  Turning the heater or a light off never cuts master power.
 - ⚡ **Snappy UI** — every command is immediately followed by a re-poll
   so the entity state updates within a second.
 

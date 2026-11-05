@@ -59,6 +59,8 @@ class NapoleonClimate(NapoleonEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:
         data = self.coordinator.data
+        if self.power_off:
+            return HVACMode.OFF
         if data is None or data.heater is None:
             return None
         return HVACMode.OFF if data.heater == 0 else HVACMode.HEAT
@@ -66,7 +68,7 @@ class NapoleonClimate(NapoleonEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str | None:
         data = self.coordinator.data
-        if data is None or data.heater is None:
+        if self.power_off or data is None or data.heater is None:
             return None
         return _HEATER_TO_PRESET.get(data.heater)
 
@@ -86,14 +88,20 @@ class NapoleonClimate(NapoleonEntity, ClimateEntity):
         data = self.coordinator.data
         current = data.heater if data is not None else None
         if hvac_mode == HVACMode.OFF:
-            if current == 0:
+            # Heater only; master power stays on so lights/flames are untouched.
+            if self.power_off or current == 0:
                 return
             await self.coordinator.fireplace.set_heater(0)
         elif hvac_mode == HVACMode.HEAT:
+            was_off = self.power_off
+            await self._async_ensure_power_on()
             if current in (1, 2):
-                return
-            # Default to low when turning on.
-            await self.coordinator.fireplace.set_heater(1)
+                # Already heating, or power-up resumes the stored stage.
+                if not was_off:
+                    return
+            else:
+                # Default to low when turning on.
+                await self.coordinator.fireplace.set_heater(1)
         else:
             raise ValueError(f"Unsupported hvac_mode: {hvac_mode}")
         await self.coordinator.async_request_refresh()
@@ -103,9 +111,12 @@ class NapoleonClimate(NapoleonEntity, ClimateEntity):
         if target is None:
             raise ValueError(f"Unsupported preset_mode: {preset_mode}")
         data = self.coordinator.data
-        if data is not None and data.heater == target:
+        was_off = self.power_off
+        if not was_off and data is not None and data.heater == target:
             return
-        await self.coordinator.fireplace.set_heater(target)
+        await self._async_ensure_power_on()
+        if data is None or data.heater != target:
+            await self.coordinator.fireplace.set_heater(target)
         await self.coordinator.async_request_refresh()
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
@@ -117,5 +128,6 @@ class NapoleonClimate(NapoleonEntity, ClimateEntity):
         data = self.coordinator.data
         if data is not None and data.setpoint_c == new_value:
             return
+        self._raise_if_power_off()
         await self.coordinator.fireplace.set_setpoint_c(new_value)
         await self.coordinator.async_request_refresh()

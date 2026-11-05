@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import logging
 from typing import TYPE_CHECKING
 
@@ -46,6 +47,17 @@ class NapoleonCoordinator(DataUpdateCoordinator[FireplaceState]):
             config_entry=entry,
         )
         self.fireplace = fireplace
+
+    async def async_set_power(self, on: bool) -> None:
+        """Write power and reflect it locally right away.
+
+        Entities gate writes on ``data.power``; without this, a follow-up
+        command issued before the (debounced) refresh lands would still see
+        the fireplace as off.
+        """
+        await self.fireplace.set_power(on)
+        if self.data is not None and self.data.power is not on:
+            self.async_set_updated_data(dataclasses.replace(self.data, power=on))
 
     async def _async_update_data(self) -> FireplaceState:
         try:

@@ -46,5 +46,10 @@
       "ember_bed_cycling": { "name": "Ember bed cycling" },
       "top_light_cycling": { "name": "Top light cycling" }
     }
+  },
+  "exceptions": {
+    "fireplace_off": {
+      "message": "{name} is off. Turn the fireplace on first; it ignores this setting while powered off."
+    }
   }
 }
