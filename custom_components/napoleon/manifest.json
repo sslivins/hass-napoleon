@@ -1,8 +1,8 @@
 {
   "domain": "napoleon",
   "name": "Napoleon Fireplace",
-  "codeowners": ["@sslivins"],
   "after_dependencies": ["frontend", "http"],
+  "codeowners": ["@sslivins"],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/sslivins/hass-napoleon",
