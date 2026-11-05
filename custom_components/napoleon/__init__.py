@@ -15,6 +15,7 @@ from pynapoleon import (
     NapoleonError,
 )
 
+from .card import async_register_card
 from .const import PLATFORMS
 from .coordinator import NapoleonCoordinator
 
@@ -32,6 +33,8 @@ type NapoleonConfigEntry = ConfigEntry[NapoleonRuntimeData]
 
 async def async_setup_entry(hass: HomeAssistant, entry: NapoleonConfigEntry) -> bool:
     """Set up Napoleon Fireplace from a config entry."""
+    await async_register_card(hass)
+
     client = NapoleonClient(
         email=entry.data[CONF_EMAIL],
         password=entry.data[CONF_PASSWORD],
