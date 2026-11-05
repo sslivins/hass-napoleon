@@ -83,6 +83,7 @@ entity: switch.living_room_power
 | `media` | `logs` | `logs` or `crystals`: whatever your fireplace has. |
 | `aspect_ratio` | `2.1` | Width ÷ height of the firebox. Use ~1.6 for narrow columns. |
 | `show_presets` | `true` | Show the scene buttons. |
+| `fill` | `false` | Stretch the firebox to fill the card's container height (for panel views / kiosks); ignores `aspect_ratio`. |
 | `entities` | – | Override auto-discovered entities by role: `power`, `climate`, `ember`, `top`, `flame_speed`, `orange`, `yellow`, `favourite`, `eco`, `boost`, `ember_cycle`, `top_cycle`. |
 
 The flames render on the GPU with WebGL. They pause automatically when the

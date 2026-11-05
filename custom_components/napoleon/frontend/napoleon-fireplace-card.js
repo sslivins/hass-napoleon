@@ -298,7 +298,11 @@ if (k == 0)      { la = vec2(0.20 * A, 0.190); lb = vec2(0.80 * A, 0.215); ra = 
 
   const STYLE = `
     :host { display: block; }
-    ha-card { overflow: hidden; }
+    ha-card { display: block; overflow: hidden; }
+    :host([fill]) { height: 100%; display: flex; flex-direction: column; }
+    :host([fill]) ha-card { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; box-sizing: border-box; }
+    :host([fill]) .box { aspect-ratio: auto; flex: 1 1 auto; min-height: 200px; }
+    :host([fill]) .head, :host([fill]) .panel, :host([fill]) .presets, :host([fill]) .pad { flex: none; }
     .head { display: flex; align-items: center; gap: 12px; padding: 12px 14px 10px; }
     .head .ic { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       background: rgba(127,127,127,.15); color: var(--secondary-text-color); transition: all .3s; }
@@ -430,6 +434,7 @@ if (k == 0)      { la = vec2(0.20 * A, 0.190); lb = vec2(0.80 * A, 0.215); ra = 
             ],
           },
           { name: "show_presets", selector: { boolean: {} } },
+          { name: "fill", selector: { boolean: {} } },
         ],
         computeLabel: (s) =>
           ({
@@ -438,6 +443,7 @@ if (k == 0)      { la = vec2(0.20 * A, 0.190); lb = vec2(0.80 * A, 0.215); ra = 
             media: "Fire media",
             aspect_ratio: "Firebox aspect ratio",
             show_presets: "Show presets",
+            fill: "Fill container height (ignores aspect ratio)",
           })[s.name],
       };
     }
@@ -447,6 +453,7 @@ if (k == 0)      { la = vec2(0.20 * A, 0.190); lb = vec2(0.80 * A, 0.215); ra = 
         throw new Error("Set 'entity' to any entity of a Napoleon fireplace");
       }
       this._config = { media: "logs", show_presets: true, aspect_ratio: 2.1, ...config };
+      this.toggleAttribute("fill", this._config.fill === true);
       this._built = false;
       this._ids = null;
       this._stopLoop();
