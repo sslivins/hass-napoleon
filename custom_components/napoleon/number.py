@@ -54,6 +54,7 @@ class NapoleonFlameSpeedNumber(_NapoleonNumberBase):
         current = self.native_value
         if current is not None and int(current) == new_value:
             return
+        self._raise_if_power_off()
         await self.coordinator.fireplace.set_flame_speed(new_value)
         await self.coordinator.async_request_refresh()
 
@@ -81,6 +82,7 @@ class NapoleonOrangeFlameNumber(_NapoleonNumberBase):
         current = self.native_value
         if current is not None and int(current) == new_value:
             return
+        self._raise_if_power_off()
         await self.coordinator.fireplace.set_orange_flame(new_value)
         await self.coordinator.async_request_refresh()
 
@@ -108,5 +110,6 @@ class NapoleonYellowFlameNumber(_NapoleonNumberBase):
         current = self.native_value
         if current is not None and int(current) == new_value:
             return
+        self._raise_if_power_off()
         await self.coordinator.fireplace.set_yellow_flame(new_value)
         await self.coordinator.async_request_refresh()

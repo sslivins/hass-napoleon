@@ -61,6 +61,8 @@ class NapoleonEmberBedLight(NapoleonEntity, LightEntity):
     @property
     def is_on(self) -> bool | None:
         data = self.coordinator.data
+        if self.power_off:
+            return False
         if data is None or data.ember_bed_brightness is None:
             return None
         return data.ember_bed_brightness > 0
@@ -68,7 +70,7 @@ class NapoleonEmberBedLight(NapoleonEntity, LightEntity):
     @property
     def brightness(self) -> int | None:
         data = self.coordinator.data
-        if data is None or data.ember_bed_brightness is None:
+        if self.power_off or data is None or data.ember_bed_brightness is None:
             return None
         return _device_to_ha_brightness(data.ember_bed_brightness)
 
@@ -79,7 +81,9 @@ class NapoleonEmberBedLight(NapoleonEntity, LightEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         fp = self.coordinator.fireplace
-        wrote = False
+        wrote = self.power_off
+        await self._async_ensure_power_on()
+        stored = self.coordinator.data.ember_bed_brightness if self.coordinator.data else None
 
         if ATTR_RGB_COLOR in kwargs:
             await fp.set_ember_bed_rgb(tuple(kwargs[ATTR_RGB_COLOR]))
@@ -87,16 +91,15 @@ class NapoleonEmberBedLight(NapoleonEntity, LightEntity):
 
         if ATTR_BRIGHTNESS in kwargs:
             target = _ha_to_device_brightness(int(kwargs[ATTR_BRIGHTNESS]))
-        elif not self.is_on:
+        elif not stored:
             target = DEVICE_BRIGHTNESS_MAX
         else:
+            # Power-up (if any) resumes the stored brightness.
             target = None
 
-        if target is not None:
-            current = self.coordinator.data.ember_bed_brightness if self.coordinator.data else None
-            if current != target:
-                await fp.set_ember_bed_brightness(target)
-                wrote = True
+        if target is not None and stored != target:
+            await fp.set_ember_bed_brightness(target)
+            wrote = True
 
         if wrote:
             await self.coordinator.async_request_refresh()
@@ -122,6 +125,8 @@ class NapoleonTopLight(NapoleonEntity, LightEntity):
     @property
     def is_on(self) -> bool | None:
         data = self.coordinator.data
+        if self.power_off:
+            return False
         if data is None or data.top_light_rgb is None:
             return None
         return any(c > 0 for c in data.top_light_rgb)
@@ -129,7 +134,7 @@ class NapoleonTopLight(NapoleonEntity, LightEntity):
     @property
     def brightness(self) -> int | None:
         data = self.coordinator.data
-        if data is None or data.top_light_rgb is None:
+        if self.power_off or data is None or data.top_light_rgb is None:
             return None
         return max(data.top_light_rgb)
 
@@ -139,6 +144,8 @@ class NapoleonTopLight(NapoleonEntity, LightEntity):
         return data.top_light_rgb if data else None
 
     async def async_turn_on(self, **kwargs: Any) -> None:
+        powered_on = self.power_off
+        await self._async_ensure_power_on()
         current = (self.coordinator.data.top_light_rgb if self.coordinator.data else None) or (
             255,
             255,
@@ -160,6 +167,8 @@ class NapoleonTopLight(NapoleonEntity, LightEntity):
 
         if new_rgb is not None and tuple(new_rgb) != tuple(current):
             await self.coordinator.fireplace.set_top_light_rgb(new_rgb)
+            await self.coordinator.async_request_refresh()
+        elif powered_on:
             await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:

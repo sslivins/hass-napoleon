@@ -50,5 +50,10 @@
       "ember_bed": { "name": "Ember bed" },
       "top_light": { "name": "Top light" }
     }
+  },
+  "exceptions": {
+    "fireplace_off": {
+      "message": "{name} is off. Turn the fireplace on first; it ignores this setting while powered off."
+    }
   }
 }
