@@ -130,6 +130,12 @@ Each fireplace becomes one device with these entities:
 | `select` **Favourite** | Scene: Party Time, Campfire Warmth, Summer Day, Glowing Sunset. |
 | `switch` **Eco mode** / **Boost mode** | Heater modes. |
 | `switch` **Ember bed cycling** / **Top light cycling** | Colour-cycling effects. |
+| `binary_sensor` **Connection** (diagnostic) | Whether the fireplace is connected to Napoleon's cloud. |
+
+If the fireplace drops off Wi-Fi, Napoleon's cloud reports it offline: the
+**Connection** sensor turns off and every other entity becomes unavailable
+(rather than showing the cloud's stale last-known state). Use the Connection
+sensor to alert you, e.g. trigger on it being `off` for 30 minutes.
 
 ### How power works
 
