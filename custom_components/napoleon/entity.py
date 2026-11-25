@@ -32,11 +32,24 @@ class NapoleonEntity(CoordinatorEntity[NapoleonCoordinator]):
             serial_number=info.dsn,
         )
 
+    @property
+    def available(self) -> bool:
+        """Unavailable when the cloud says the fireplace is offline.
+
+        Ayla keeps serving the last-known property values while a device is
+        off Wi-Fi, so without this the entities would show stale state and
+        writes would silently go nowhere. ``online is None`` (unknown) keeps
+        the entity available.
+        """
+        data = self.coordinator.data
+        return super().available and (data is None or data.online is not False)
+
     # Power is a master switch: while it is off the device silently discards
     # every other write and, on power-up, resumes its last stored state
     # (verified live). Entities therefore stay available while off (only
-    # cloud failures make them unavailable) and route writes through the
-    # helpers below so nothing is sent that the device would ignore.
+    # cloud failures or the device being offline make them unavailable) and
+    # route writes through the helpers below so nothing is sent that the
+    # device would ignore.
 
     @property
     def power_off(self) -> bool:

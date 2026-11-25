@@ -61,10 +61,19 @@ class NapoleonCoordinator(DataUpdateCoordinator[FireplaceState]):
 
     async def _async_update_data(self) -> FireplaceState:
         try:
-            return await self.fireplace.refresh()
+            state = await self.fireplace.refresh()
         except NapoleonAuthError as err:
             raise ConfigEntryAuthFailed(str(err)) from err
         except NapoleonConnectionError as err:
             raise UpdateFailed(f"Connection error: {err}") from err
         except NapoleonError as err:
             raise UpdateFailed(str(err)) from err
+        previous = self.data.online if self.data is not None else None
+        if state.online is False and previous is not False:
+            _LOGGER.warning(
+                "%s is offline in Napoleon's cloud (dropped off Wi-Fi?)",
+                self.fireplace.name,
+            )
+        elif state.online is True and previous is False:
+            _LOGGER.info("%s is back online", self.fireplace.name)
+        return state

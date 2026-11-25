@@ -28,6 +28,9 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "connectivity": { "name": "Connection" }
+    },
     "number": {
       "flame_speed": { "name": "Flame speed" },
       "orange_flame": { "name": "Orange flame" },
